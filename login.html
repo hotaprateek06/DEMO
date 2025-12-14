@@ -71,33 +71,26 @@ button{
     <h3 id="title">Login</h3>
   </div>
 
-  <!-- LOGIN FORM -->
+  <!-- 🔐 LOGIN FORM -->
   <form id="loginForm">
     <input id="loginEmail" type="email" placeholder="Email" required>
     <input id="loginPassword" type="password" placeholder="Password" required>
 
-    <!-- ✅ ROLE IN LOGIN -->
-    <select id="loginRole" required>
-      <option value="">Select Role</option>
-      <option value="teacher">Teacher</option>
-      <option value="student">Student</option>
-      <option value="admin">Admin</option>
-    </select>
-
     <button onclick="login(event)">Login</button>
+
     <div class="switch">
       Not a member? <span onclick="showSignup()">Signup</span>
     </div>
   </form>
 
-  <!-- SIGNUP FORM -->
+  <!-- 📝 SIGNUP FORM -->
   <form id="signupForm" style="display:none;">
     <input id="fullName" placeholder="Full Name" required>
     <input id="signupEmail" type="email" placeholder="Email" required>
     <input id="signupPassword" type="password" placeholder="Password" required>
     <input id="confirmPassword" type="password" placeholder="Confirm Password" required>
 
-    <!-- ROLE ONLY IN SIGNUP TOO -->
+    <!-- ROLE ONLY IN SIGNUP -->
     <select id="signupRole" required>
       <option value="">Select Role</option>
       <option value="teacher">Teacher</option>
@@ -106,6 +99,7 @@ button{
     </select>
 
     <button onclick="signup(event)">Create Account</button>
+
     <div class="switch">
       Already have an account? <span onclick="showLogin()">Login</span>
     </div>
@@ -114,23 +108,27 @@ button{
 </div>
 
 <script>
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const title = document.getElementById("title");
+
 function showSignup(){
-  loginForm.style.display="none";
-  signupForm.style.display="block";
-  title.innerText="Signup";
+  loginForm.style.display = "none";
+  signupForm.style.display = "block";
+  title.innerText = "Signup";
 }
 
 function showLogin(){
-  signupForm.style.display="none";
-  loginForm.style.display="block";
-  title.innerText="Login";
+  signupForm.style.display = "none";
+  loginForm.style.display = "block";
+  title.innerText = "Login";
 }
 
 function getUsers(){
   return JSON.parse(localStorage.getItem("users")) || [];
 }
 
-/* SIGNUP */
+/* 📝 SIGNUP */
 function signup(e){
   e.preventDefault();
 
@@ -158,27 +156,28 @@ function signup(e){
   showLogin();
 }
 
-/* LOGIN */
+/* 🔐 LOGIN */
 function login(e){
   e.preventDefault();
+
   let users = getUsers();
 
   let user = users.find(u =>
     u.email === loginEmail.value &&
-    u.password === loginPassword.value &&
-    u.role === loginRole.value
+    u.password === loginPassword.value
   );
 
   if(!user){
-    alert("Invalid credentials or role");
+    alert("Invalid email or password");
     return;
   }
 
   localStorage.setItem("currentUser", JSON.stringify(user));
 
-  if(user.role === "teacher") location.href="teacher.html";
-  if(user.role === "student") location.href="student.html";
-  if(user.role === "admin") location.href="admin.html";
+  // ROLE BASED REDIRECT
+  if(user.role === "teacher") location.href = "teacher.html";
+  else if(user.role === "student") location.href = "student.html";
+  else if(user.role === "admin") location.href = "admin.html";
 }
 </script>
 
